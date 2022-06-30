@@ -3,7 +3,7 @@
 # File Created: 28-12-2021 01:24:00
 # Author: Clay Risser
 # -----
-# Last Modified: 30-06-2022 06:04:19
+# Last Modified: 30-06-2022 06:19:54
 # Modified By: Clay Risser
 # -----
 # Risser Labs LLC (c) Copyright 2021
@@ -52,7 +52,7 @@ $(info calculating monorepo workspaces ⌛)
 
 define B64_WORKSPACES
 $(call b64_encode_each,$(shell for w in \
-	. $$($(NODE) -e "console.log((require('./package.json').workspaces || []).join(' '))"); do \
+	$$($(NODE) -e "console.log((require('./package.json').workspaces || []).join(' '))"); do \
 	if [ -d "$$w" ] && [ -f "$$w/package.json" ]; then \
 		$(ECHO) "$$w"; \
 	fi; \
