@@ -3,10 +3,10 @@
 # File Created: 28-12-2021 01:24:00
 # Author: Clay Risser
 # -----
-# Last Modified: 28-12-2021 01:25:28
+# Last Modified: 30-06-2022 06:05:05
 # Modified By: Clay Risser
 # -----
-# BitSpur Inc (c) Copyright 2021
+# Risser Labs LLC (c) Copyright 2021
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,24 +22,24 @@
 
 MKPM_PKG_NAME := yarn
 
-MKPM_PKG_VERSION := 0.0.1
+MKPM_PKG_VERSION := 0.0.2
 
 MKPM_PKG_DESCRIPTION := "manage yarn projects"
 
 MKPM_PKG_AUTHOR := Clay Risser <clayrisser@gmail.com>
 
-MKPM_PKG_SOURCE := https://gitlab.com/bitspur/community/mkpm-yarn.git
+MKPM_PKG_SOURCE := https://gitlab.com/risserlabs/community/mkpm-yarn.git
 
 MKPM_PKG_FILES_REGEX :=
 
-MKPM_PACKAGES := \
+export MKPM_PACKAGES_DEFAULT := \
 	gnu=0.0.3
 
-MKPM_REPOS := \
-	https://gitlab.com/bitspur/community/mkpm-stable.git
+export MKPM_REPO_DEFAULT := \
+	https://gitlab.com/risserlabs/community/mkpm-stable.git
 
 ############# MKPM BOOTSTRAP SCRIPT BEGIN #############
-MKPM_BOOTSTRAP := https://bitspur.gitlab.io/community/mkpm/bootstrap.mk
+MKPM_BOOTSTRAP := https://gitlab.com/api/v4/projects/29276259/packages/generic/mkpm/0.2.0/bootstrap.mk
 export PROJECT_ROOT := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 NULL := /dev/null
 TRUE := true

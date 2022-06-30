@@ -3,10 +3,10 @@
 # File Created: 28-12-2021 01:24:00
 # Author: Clay Risser
 # -----
-# Last Modified: 28-12-2021 01:27:02
+# Last Modified: 30-06-2022 06:04:19
 # Modified By: Clay Risser
 # -----
-# BitSpur Inc (c) Copyright 2021
+# Risser Labs LLC (c) Copyright 2021
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -51,7 +51,12 @@ ifeq (,$(CALCULATED_WORKSPACES))
 $(info calculating monorepo workspaces ⌛)
 
 define B64_WORKSPACES
-$(call b64_encode_each,$(shell $(NPM) workspaces list | $(SED) '/YN0000: \..*/d' | $(SED) '/YN0000: Done in.*/d' | $(CUT) -d' ' -f3-))
+$(call b64_encode_each,$(shell for w in \
+	. $$($(NODE) -e "console.log((require('./package.json').workspaces || []).join(' '))"); do \
+	if [ -d "$$w" ] && [ -f "$$w/package.json" ]; then \
+		$(ECHO) "$$w"; \
+	fi; \
+done))
 endef
 export B64_WORKSPACES
 
