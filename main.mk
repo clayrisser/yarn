@@ -3,7 +3,7 @@
 # File Created: 28-12-2021 01:24:00
 # Author: Clay Risser
 # -----
-# Last Modified: 30-06-2022 06:19:54
+# Last Modified: 03-07-2022 10:03:33
 # Modified By: Clay Risser
 # -----
 # Risser Labs LLC (c) Copyright 2021
@@ -24,7 +24,7 @@ NODE ?= node
 YARN ?= $(NODE) $(PROJECT_ROOT)/.yarn/releases/yarn-$(shell $(ECHO) $(shell $(NODE) -e \
 	"console.log(require('$(PROJECT_ROOT)/package.json').packageManager)") | \
 	$(CUT) -d'@' -f2).cjs
-NPM ?= $(YARN)
+NPM ?= $(call ternary,$(WHICH) npm,$(WHICH) npm,$(YARN))
 
 export BASE64_NOWRAP ?= $(call ternary,openssl version,openssl base64 -A,base64 -w0)
 
