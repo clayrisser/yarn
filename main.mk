@@ -183,7 +183,7 @@ fi && \
 $(ECHO) $$TOKEN)
 endef
 
-export NPM_AUTH_TOKEN ?= $(call ternary,[ "$(call gitlab_token)" != "" ],$(call gitlab_token),poop)
+export NPM_AUTH_TOKEN ?= $(call ternary,[ "$(call gitlab_token)" != "" ],$(call gitlab_token),)
 
 CACHE_ENVS += \
 	B64_WORKSPACES \
