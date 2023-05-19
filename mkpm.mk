@@ -3,7 +3,7 @@
 # File Created: 28-12-2021 01:24:00
 # Author: Clay Risser
 # -----
-# Last Modified: 19-05-2023 02:12:51
+# Last Modified: 19-05-2023 03:07:56
 # Modified By: Clay Risser
 # -----
 # Risser Labs LLC (c) Copyright 2021
@@ -22,7 +22,7 @@
 
 MKPM_PKG_NAME := yarn
 
-MKPM_PKG_VERSION := 0.0.6
+MKPM_PKG_VERSION := 0.0.7
 
 MKPM_PKG_DESCRIPTION := "manage yarn projects"
 
