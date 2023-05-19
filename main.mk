@@ -3,7 +3,7 @@
 # File Created: 28-12-2021 01:24:00
 # Author: Clay Risser
 # -----
-# Last Modified: 04-07-2022 12:09:38
+# Last Modified: 19-05-2023 02:11:11
 # Modified By: Clay Risser
 # -----
 # Risser Labs LLC (c) Copyright 2021
@@ -168,6 +168,22 @@ $(call git_clean_flags,node_modules) \
 	-e $(BANG)/pnpm-lock.yaml \
 	-e $(BANG)/yarn.lock
 endef
+
+define gitlab_token
+$(shell AUTH=$$($(CAT) $(HOME)/.docker/config.json 2>$(NULL) | $(JQ) -r '.auths["registry.gitlab.com"].auth' 2>$(NULL)) && \
+TOKEN="" && \
+if [ "$$AUTH" != "" ] && [ "$$AUTH" != "null" ]; then \
+	TOKEN=$$($(ECHO) "$$AUTH" | $(BASE64_NOWRAP) -d 2>$(NULL) | $(CUT) -d':' -f2 2>$(NULL)); \
+else \
+	DOCKER_CREDENTIAL=$$($(ECHO) docker-credential-$$($(CAT) $(HOME)/.docker/config.json 2>$(NULL) | $(JQ) -r '.credsStore' 2>$(NULL))) && \
+    if $(WHICH) $$DOCKER_CREDENTIAL 2>$(NULL) >$(NULL); then \
+        TOKEN=$$($(ECHO) registry.gitlab.com | $$DOCKER_CREDENTIAL get | $(JQ) -r '.Secret'); \
+	fi; \
+fi && \
+$(ECHO) $$TOKEN)
+endef
+
+export NPM_AUTH_TOKEN ?= $(call ternary,[ "$(call gitlab_token)" != "" ],$(call gitlab_token),poop)
 
 CACHE_ENVS += \
 	B64_WORKSPACES \

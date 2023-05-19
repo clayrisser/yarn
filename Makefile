@@ -3,7 +3,7 @@
 # File Created: 28-12-2021 01:24:00
 # Author: Clay Risser
 # -----
-# Last Modified: 30-06-2022 05:41:53
+# Last Modified: 19-05-2023 02:09:00
 # Modified By: Clay Risser
 # -----
 # Risser Labs LLC (c) Copyright 2021
@@ -27,6 +27,9 @@ ifneq (,$(MKPM_READY))
 -include main.mk
 
 PACK_DIR := $(MKPM_TMP)/pack
+
+$(info GITLAB_TOKEN $(call gitlab_token))
+$(info NPM_AUTH_TOKEN $(NPM_AUTH_TOKEN))
 
 .PHONY: info
 info:
