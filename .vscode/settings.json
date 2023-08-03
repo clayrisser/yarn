@@ -8,7 +8,12 @@
     "nixpkgs",
     "stdenv"
   ],
-  "psi-header.variables": [["projectCreationYear", "2021"]],
+  "psi-header.variables": [
+    [
+      "projectCreationYear",
+      "2021"
+    ]
+  ],
   "psi-header.config": {
     "blankLinesAfter": 1,
     "company": "Risser Labs LLC",
@@ -61,7 +66,9 @@
       "modDate": "Last Modified:",
       "modDateFormat": "dd-MM-yyyy HH:mm:ss",
       "prefix": " *",
-      "replace": ["File:"],
+      "replace": [
+        "File:"
+      ],
       "rootDirFileName": "LICENSE",
       "suffix": ""
     },
@@ -76,7 +83,9 @@
       "modDate": "Last Modified:",
       "modDateFormat": "dd-MM-yyyy HH:mm:ss",
       "prefix": "#",
-      "replace": ["File:"],
+      "replace": [
+        "File:"
+      ],
       "rootDirFileName": "LICENSE",
       "suffix": ""
     }
@@ -84,16 +93,24 @@
   "psi-header.changes-tracking": {
     "autoHeader": "autoSave",
     "enforceHeader": true,
-    "include": ["rust", "makefile"],
+    "include": [
+      "rust",
+      "makefile"
+    ],
     "isActive": true,
     "modAuthor": "Modified By:",
     "modDate": "Last Modified:",
     "modDateFormat": "dd-MM-yyyy hh:nn:ss",
-    "replace": ["Filename:"],
+    "replace": [
+      "Filename:"
+    ],
     "updateLicenseVariables": true
   },
   "psi-header.license-reference": {
     "uri": "../LICENSE",
     "uriIsLocalFile": true
+  },
+  "files.associations": {
+    "Mkpmfile": "makefile"
   }
 }
