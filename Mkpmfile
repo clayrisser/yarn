@@ -1,10 +1,10 @@
-# File: /Makefile
+# File: /Mkpmfile
 # Project: mkpm-yarn
 # File Created: 28-12-2021 01:24:00
 # Author: Clay Risser
 # -----
-# Last Modified: 19-05-2023 02:09:00
-# Modified By: Clay Risser
+# Last Modified: 04-08-2023 18:04:06
+# Modified By: Ajith Kumar
 # -----
 # Risser Labs LLC (c) Copyright 2021
 #
@@ -20,10 +20,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+include $(MKPM)/mkpm
 include mkpm.mk
 -include $(MKPM)/gnu
-ifneq (,$(MKPM_READY))
-
 -include main.mk
 
 PACK_DIR := $(MKPM_TMP)/pack
@@ -63,5 +62,3 @@ clean:
 .PHONY: purge
 purge: clean
 	@$(GIT) clean -fXd
-
-endif
