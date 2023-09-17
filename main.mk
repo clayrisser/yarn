@@ -3,7 +3,7 @@
 # File Created: 28-12-2021 01:24:00
 # Author: Clay Risser
 # -----
-# Last Modified: 19-05-2023 02:11:11
+# Last Modified: 17-09-2023 17:25:08
 # Modified By: Clay Risser
 # -----
 # Risser Labs LLC (c) Copyright 2021
@@ -177,7 +177,7 @@ if [ "$$AUTH" != "" ] && [ "$$AUTH" != "null" ]; then \
 else \
 	DOCKER_CREDENTIAL=$$($(ECHO) docker-credential-$$($(CAT) $(HOME)/.docker/config.json 2>$(NULL) | $(JQ) -r '.credsStore' 2>$(NULL))) && \
     if $(WHICH) $$DOCKER_CREDENTIAL 2>$(NULL) >$(NULL); then \
-        TOKEN=$$($(ECHO) registry.gitlab.com | $$DOCKER_CREDENTIAL get | $(JQ) -r '.Secret'); \
+        TOKEN=$$($(ECHO) registry.gitlab.com | $$DOCKER_CREDENTIAL get 2>$(NULL) | $(JQ) -r '.Secret' 2>$(NULL)); \
 	fi; \
 fi && \
 $(ECHO) $$TOKEN)
