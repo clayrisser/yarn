@@ -3,7 +3,7 @@
 # File Created: 28-12-2021 01:24:00
 # Author: Clay Risser
 # -----
-# Last Modified: 17-09-2023 17:25:08
+# Last Modified: 18-09-2023 05:07:26
 # Modified By: Clay Risser
 # -----
 # Risser Labs LLC (c) Copyright 2021
@@ -128,13 +128,9 @@ endef
 
 export CSPELLRC := $(MKPM_TMP)/cspellrc.json
 define cspell
-$(ECHO) '{"language":"en","version":"0.1","words":$(shell \
-	$(CAT) $(PROJECT_ROOT)/.vscode/settings.json | \
-	$(SED) 's|^\s*//.*||g' | \
-	$(JQ) ".[\"cSpell.words\"]")}' > $(CSPELLRC) && \
 [ '$?' = '' ] && \
 	$(ECHO) 'CSpell: Files checked: 0, Issues found: 0 in 0 files' || \
-	$(CSPELL) --config $(MKPM_TMP)/cspellrc.json $2 $1
+	$(CSPELL) $2 $1
 endef
 
 define prettier
