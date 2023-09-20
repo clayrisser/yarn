@@ -3,7 +3,7 @@
 # File Created: 28-12-2021 01:24:00
 # Author: Clay Risser
 # -----
-# Last Modified: 17-09-2023 17:25:08
+# Last Modified: 20-09-2023 17:05:54
 # Modified By: Clay Risser
 # -----
 # Risser Labs LLC (c) Copyright 2021
@@ -29,7 +29,7 @@ NPM ?= $(call ternary,$(WHICH) npm,npm,$(YARN))
 export BASE64_NOWRAP ?= $(call ternary,openssl version,openssl base64 -A,base64 -w0)
 
 define yarn_binary
-$(call ternary,$(WHICH) $(PROJECT_ROOT)/node_modules/.bin/$1,$(PROJECT_ROOT)/node_modules/.bin/$1,$(CURDIR)/node_modules/.bin/$1)
+$(call ternary,$(WHICH) $(PROJECT_ROOT)/node_modules/.bin/$1,$(PROJECT_ROOT)/node_modules/.bin/$1,$(YARN) $1)
 endef
 
 define b64_encode_each
