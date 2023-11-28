@@ -1,12 +1,9 @@
 # File: /mkpm.mk
-# Project: mkpm-yarn
-# File Created: 28-12-2021 01:24:00
+# Project: yarn
+# File Created: 28-11-2023 13:08:34
 # Author: Clay Risser
 # -----
-# Last Modified: 19-05-2023 03:07:56
-# Modified By: Clay Risser
-# -----
-# Risser Labs LLC (c) Copyright 2021
+# BitSpur (c) Copyright 2021 - 2023
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.

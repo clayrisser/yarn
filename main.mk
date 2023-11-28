@@ -1,9 +1,9 @@
 # File: /main.mk
 # Project: yarn
-# File Created: 20-09-2023 17:06:33
+# File Created: 28-11-2023 13:08:34
 # Author: Clay Risser
 # -----
-# Risser Labs LLC (c) Copyright 2021 - 2023
+# BitSpur (c) Copyright 2021 - 2023
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,6 +28,9 @@ export BASE64_NOWRAP ?= $(call ternary,openssl version,openssl base64 -A,base64 
 define yarn_binary
 $(call ternary,$(WHICH) $(PROJECT_ROOT)/node_modules/.bin/$1,$(PROJECT_ROOT)/node_modules/.bin/$1,$(YARN) $1)
 endef
+
+BUN ?= $(call ternary,$(WHICH) bun,bun,$(call yarn_binary,bun))
+PREFER_BUN ?= $(shell $(BUN) -v >$(NOOUT) && $(ECHO) 1)
 
 define b64_encode_each
 $(shell for i in $1; do \
@@ -120,7 +123,7 @@ done
 endef
 
 define shell_arr_to_json_arr
-$(shell (for i in $1; do echo $$i; done) | jq -R . | jq -s .)
+$(shell (for i in $1; do echo $$i; done) | $(JQ) -R . | $(JQ) -s .)
 endef
 
 export CSPELLRC := $(MKPM_TMP)/cspellrc.json
@@ -148,11 +151,20 @@ endef
 
 export JEST_TEST_RESULTS := $(MKPM_TMP)/jestTestResults.json
 export COVERAGE_DIRECTORY := $(MKPM_TMP)/coverage
-define jest
-$(JEST) --pass-with-no-tests --json --outputFile=$(JEST_TEST_RESULTS) --coverage \
-		--coverageDirectory=$(COVERAGE_DIRECTORY) --testResultsProcessor=jest-sonar-reporter \
-		--collectCoverageFrom='$(call shell_arr_to_json_arr,$1)' --findRelatedTests $1 $2
+
+ifeq (1,$(PREFER_BUN))
+define test
+$(BUN) test --coverage $2
 endef
+else
+define test
+$(MKDIR) -p $(MKPM_TMP)/reports $(NOOUT) && \
+NODE_OPTIONS="--experimental-vm-modules" $(JEST) \
+	--pass-with-no-tests --json --outputFile=$(JEST_TEST_RESULTS) --coverage \
+	--coverageDirectory=$(COVERAGE_DIRECTORY) --testResultsProcessor=jest-sonar-reporter \
+	--collectCoverageFrom='$(call shell_arr_to_json_arr,$1)' --findRelatedTests $1 $2
+endef
+endif
 
 define YARN_GIT_CLEAN_FLAGS
 $(call git_clean_flags,node_modules) \
@@ -181,7 +193,8 @@ export NPM_AUTH_TOKEN ?= $(call ternary,[ "$(call gitlab_token)" != "" ],$(call 
 CACHE_ENVS += \
 	B64_WORKSPACES \
 	BASE64_NOWRAP \
+	BUN \
+	CALCULATED_WORKSPACES \
 	MONOREPO \
 	WORKSPACES \
-	CALCULATED_WORKSPACES \
 	WORKSPACE_NAMES
