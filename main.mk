@@ -29,8 +29,8 @@ define yarn_binary
 $(call ternary,$(WHICH) $(PROJECT_ROOT)/node_modules/.bin/$1,$(PROJECT_ROOT)/node_modules/.bin/$1,$(YARN) $1)
 endef
 
-BUN ?= $(call ternary,$(WHICH) bun,bun,$(call yarn_binary,bun))
-PREFER_BUN ?= $(shell $(BUN) -v >$(NOOUT) && $(ECHO) 1)
+BUN ?= $(call ternary,$(WHICH) bun,bun,$(YARN) bun)
+PREFER_BUN ?=
 
 define b64_encode_each
 $(shell for i in $1; do \
