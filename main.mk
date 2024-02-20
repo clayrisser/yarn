@@ -110,13 +110,13 @@ done
 endef
 
 define workspace_foreach
-$(call workspace_exec_foreach,$(MAKE) -s $1 ARGS=$2 || $(TRUE))
+$(call workspace_exec_foreach,$(MKPM_MAKE) $1 ARGS=$2 || $(TRUE))
 endef
 
 define workspace_foreach_help
 for w in $(call b64_workspace_paths); do \
 	$(EXPORT) WORKSPACE=$$($(ECHO) $$w | $(BASE64_NOWRAP) -d) && \
-		$(MAKE) -sC $$WORKSPACE $$([ "$1" = "" ] && echo $(HELP) || echo $1) ARGS=$2 \
+		$(MKPM_MAKE) -C $$WORKSPACE $$([ "$1" = "" ] && echo $(HELP) || echo $1) ARGS=$2 \
 		HELP_PREFIX="$$($(ECHO) $$WORKSPACE | $(GREP) -oE '[^\/]+$$')/" 2>$(NULL) || \
 		$(TRUE); \
 done
