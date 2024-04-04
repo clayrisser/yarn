@@ -32,96 +32,6 @@ endef
 BUN ?= $(call ternary,$(WHICH) bun,bun,$(YARN) bun)
 PREFER_BUN ?=
 
-define b64_encode_each
-$(shell for i in $1; do \
-	$(ECHO) $$i | $(BASE64_NOWRAP) && echo; \
-done)
-endef
-
-define b64_decode_each
-$(shell for i in $1; do \
-	$(ECHO) $$i | $(BASE64_NOWRAP) -d; \
-done)
-endef
-
-MONOREPO ?= 0
-
-ifneq (0,$(MONOREPO))
-ifeq (,$(CALCULATED_WORKSPACES))
-$(info calculating monorepo workspaces ⌛)
-
-define B64_WORKSPACES
-$(call b64_encode_each,$(shell for w in \
-	$$($(NODE) -e "console.log((require('./package.json').workspaces || []).join(' '))"); do \
-	if [ -d "$$w" ] && [ -f "$$w/package.json" ]; then \
-		$(ECHO) "$$w"; \
-	fi; \
-done))
-endef
-export B64_WORKSPACES
-
-define WORKSPACES
-$(call b64_decode_each,$(B64_WORKSPACES))
-endef
-export WORKSPACES
-
-define WORKSPACE_NAMES
-$(shell for w in $(WORKSPACES); do \
-	$(ECHO) $$w | $(GREP) -oE '[^\/]+$$'; \
-done)
-endef
-export WORKSPACE_NAMES
-
-export CALCULATED_WORKSPACES := 1
-endif
-endif
-
-ifeq (,$(WORKSPACES))
-	MONOREPO = 0
-else
-	MONOREPO = 1
-endif
-
-define b64_workspace_paths
-$(shell for i in $(B64_WORKSPACES); do \
-	$(ECHO) $(PROJECT_ROOT)/$$(echo $$i | $(BASE64_NOWRAP) -d)$$([ '$1' = '' ] || $(ECHO) '/$1') | \
-	$(BASE64_NOWRAP) && echo; \
-done)
-endef
-
-define workspace_paths
-$(shell for w in $(call b64_workspace_paths,$1); do \
-	$(ECHO) $$w | $(BASE64_NOWRAP) -d; \
-done)
-endef
-
-define map_workspace
-$(shell for w in $(WORKSPACES); do \
-	if [ "$$($(ECHO) $$w | $(GREP) -oE '[^\/]+$$')" = "$1" ]; then \
-		$(ECHO) $$w; \
-	fi \
-done)
-endef
-
-define workspace_exec_foreach
-for w in $(call b64_workspace_paths); do \
-	$(CD) "$$($(ECHO) $$w | $(BASE64_NOWRAP) -d)" && $1; \
-done
-endef
-
-define workspace_foreach
-$(call workspace_exec_foreach,$(MKPM_MAKE) $1 ARGS=$2 || $(TRUE))
-endef
-
-define workspace_foreach_help
-for w in $(call b64_workspace_paths); do \
-	$(EXPORT) WORKSPACE=$$($(ECHO) $$w | $(BASE64_NOWRAP) -d) && \
-		$(MKPM_MAKE) -C $$WORKSPACE $$([ "$1" = "" ] && echo $(HELP) || echo $1) ARGS=$2 \
-		HELP_PREFIX="$$($(ECHO) $$WORKSPACE | $(GREP) -oE '[^\/]+$$')/" 2>$(NULL) || \
-		$(TRUE); \
-done
-endef
-
 define shell_arr_to_json_arr
 $(shell (for i in $1; do echo $$i; done) | $(JQ) -R . | $(JQ) -s .)
 endef
@@ -191,10 +101,5 @@ endef
 export NPM_AUTH_TOKEN ?= $(call ternary,[ "$(call gitlab_token)" != "" ],$(call gitlab_token),)
 
 CACHE_ENVS += \
-	B64_WORKSPACES \
 	BASE64_NOWRAP \
-	BUN \
-	CALCULATED_WORKSPACES \
-	MONOREPO \
-	WORKSPACES \
-	WORKSPACE_NAMES
+	BUN
